@@ -2,7 +2,7 @@ import com.fazecast.jSerialComm.SerialPort
 import com.fazecast.jSerialComm.SerialPortDataListener
 import com.fazecast.jSerialComm.SerialPortEvent
 
-class SerialListener: SerialPortDataListener {
+class SerialListener(val onLineReceived: (String) -> Unit = {}): SerialPortDataListener {
     private val stringBuilder = StringBuilder()
     override fun getListeningEvents(): Int {
         return SerialPort.LISTENING_EVENT_DATA_AVAILABLE or SerialPort.LISTENING_EVENT_DATA_RECEIVED
@@ -16,7 +16,7 @@ class SerialListener: SerialPortDataListener {
         if(stringBuilder.contains('\n')) {
             val line = stringBuilder.toString()
             stringBuilder.clear()
-            println(line)
+            onLineReceived(line)
         }
     }
 
