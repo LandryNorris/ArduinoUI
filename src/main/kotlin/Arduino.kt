@@ -16,7 +16,10 @@ suspend fun awaitArduino(): Arduino? = withContext(Dispatchers.Default) {
         println(ports.joinToString(", "))
         if(ports.isEmpty()) continue
 
-        val arduinoPort = ports.first()
+        val arduinoPort = ports.firstOrNull {
+            it.toString().lowercase()
+            .contains("acm")
+        } ?: continue
 
         arduinoPort.openPort()
 
